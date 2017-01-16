@@ -48,7 +48,7 @@
 #' plotpredictrcure(predm,model="ph")
 #' 
 #' # just a test:  this should be identical to classical cure model
-#' pd2<-smcure(Surv(FAILTIME,FAILCENS)~TRT+SEX+AGE,cureform=~TRT+SEX+AGE,
+#' pd2 <- rcure(Surv(FAILTIME,FAILCENS)~TRT+SEX+AGE,cureform=~TRT+SEX+AGE,
 #' data=e1684,model="ph",Var = FALSE,
 #' method = "glm.fit", prior.mean = 0, prior.scale = Inf, prior.df = Inf,
 #' prior.mean.for.intercept = 0, prior.scale.for.intercept = Inf,
