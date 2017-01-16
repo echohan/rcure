@@ -1,4 +1,4 @@
-﻿#' Robust cure model
+#' Robust cure model
 #'
 #' @description Fits robust cure model by incorporating a weakly informative prior distribution for uncure probability part in cure models
 #' @param formula a formula object for the survival part in cure model. left must be a survival object as returned by the Surv function
