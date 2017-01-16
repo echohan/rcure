@@ -1,4 +1,4 @@
-#' Robust cure model
+﻿#' Robust cure model
 #'
 #' @description Fits robust cure model by incorporating a weakly informative prior distribution for uncure probability part in cure models
 #' @param formula a formula object for the survival part in cure model. left must be a survival object as returned by the Surv function
@@ -17,7 +17,7 @@
 #' @param prior.mean prior mean for the coefficients: default is 0. Can be a vector of length equal to the number of predictors (not counting the intercept, if any). If it is a scalar, it is expanded to the length of this vector.
 #' @param prior.scale prior scale for the coefficients: default is NULL; if is NULL, for a logit model, prior.scale is 2.5; for a probit model, prior scale is 2.5*1.6. Can be a vector of length equal to the number of predictors (not counting the intercept, if any). If it is a scalar, it is expanded to the length of this vector
 #' @param prior.df prior degrees of freedom for the coefficients. For t distribution: default is 1 (Cauchy). Set to Inf to get normal prior distributions. Can be a vector of length equal to the number of predictors (not counting the intercept, if any). If it is a scalar, it is expanded to the length of this vector
-#' @param prior.mean.for.intercept prior mean for the intercept: default is 0. See ‘Details’
+#' @param prior.mean.for.intercept prior mean for the intercept: default is 0. 
 #' @param prior.scale.for.intercept prior scale for the intercept: default is NULL; for a logit model, prior scale for intercept is 10; for probit model, prior scale for intercept is rescaled as 10*1.6.
 #' @param prior.df.for.intercept prior degrees of freedom for the intercept: default is 1.
 #' @param min.prior.scale Minimum prior scale for the coefficients: default is 1e-12.
@@ -33,18 +33,29 @@
 #' library(smcure)
 #' library(arm)
 #' data(e1684)
+#' 
 #' # fit PH robust cure model
 #' pd <- rcure(Surv(FAILTIME,FAILCENS)~TRT+SEX+AGE,cureform=~TRT+SEX+AGE,
 #' data=e1684,model="ph",Var = FALSE,
 #' method = "glm.fit", prior.mean = 0, prior.scale = NULL, prior.df = 1,
 #' prior.mean.for.intercept = 0, prior.scale.for.intercept = NULL,
 #' prior.df.for.intercept = 1, min.prior.scale = 1e-12,
-#' scaled = TRUE, n.iter = 100, Warning=TRUE)
+#' scaled = TRUE, n.iter = 100, Warning=F)
 #' printrcure(pd,Var = FALSE)
 #' # plot predicted survival curves for male with median centered age by treatment groups
 #' predm=predictrcure(pd,newX=cbind(c(1,0),c(0,0),c(0.579,0.579)),
 #' newZ=cbind(c(1,0),c(0,0),c(0.579,0.579)),model="ph")
 #' plotpredictrcure(predm,model="ph")
+#' 
+#' # just a test:  this should be identical to classical cure model
+#' pd2<-smcure(Surv(FAILTIME,FAILCENS)~TRT+SEX+AGE,cureform=~TRT+SEX+AGE,
+#' data=e1684,model="ph",Var = FALSE,
+#' method = "glm.fit", prior.mean = 0, prior.scale = Inf, prior.df = Inf,
+#' prior.mean.for.intercept = 0, prior.scale.for.intercept = Inf,
+#' prior.df.for.intercept = Inf, Warning=F)
+#' pd3 <- smcure(Surv(FAILTIME,FAILCENS)~TRT+SEX+AGE,cureform=~TRT+SEX+AGE,
+#' data=e1684,model="ph",Var = FALSE)
+#' 
 #' data(bmt)
 #' # fit AFT robust cure model
 #' bmtfit <- rcure(formula = Surv(Time, Status) ~ TRT, cureform = ~TRT,
@@ -52,7 +63,7 @@
 #' method = "glm.fit", prior.mean = 0, prior.scale = NULL, prior.df = 1,
 #' prior.mean.for.intercept = 0, prior.scale.for.intercept = NULL,
 #' prior.df.for.intercept = 1, min.prior.scale = 1e-12,
-#' scaled = TRUE, n.iter = 100, Warning=TRUE)
+#' scaled = TRUE, n.iter = 100, Warning=F)
 #' printrcure(bmtfit,Var = FALSE)
 #' # plot predicted Survival curves by treatment groups
 #' predbmt=predictrcure(bmtfit,newX=c(0,1),newZ=c(0,1),model="aft")
@@ -66,7 +77,7 @@ rcure <-function(formula, cureform, offset.s=NULL, data, na.action=na.omit, mode
                  method = "glm.fit", prior.mean = 0, prior.scale = NULL, prior.df = 1,
                  prior.mean.for.intercept = 0,
                  prior.scale.for.intercept = NULL, prior.df.for.intercept = 1,
-                 min.prior.scale = 1e-12, scaled = TRUE, n.iter = 100, Warning=F,...)
+                 min.prior.scale = 1e-12, scaled = TRUE, n.iter = 100, Warning=TRUE,...)
 
 {
 	call <- match.call()
